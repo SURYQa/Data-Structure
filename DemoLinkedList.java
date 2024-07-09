@@ -24,46 +24,126 @@ public class Demo1 {
 	}
 	
 }
-public class Demo {
-	public static void main(String[] args) {
+package org.linkedlist;
+
+import org.linkedlist.LinkedList.Node;
+
+public class DoublyLinkedList {
+	Node head;
+	Node tail;
+	
+	class Node{
+		int data;
+		Node prev;
+		Node next; // next value reference
 		
-		LinkedList list = new LinkedList();
+		Node(int val){ //constructor
+			data = val ;
+			next = null;
+			prev = null;
+		}
+	}
+	DoublyLinkedList(){
+		head = null;
+		tail = null;
+	}
+	
+	public void insertAtBegining(int val) {
 		
-		//list.deleteAtpos(1); // This line throw the Exception 
-		list.insertAtBegining(40);
+		Node newNode = new Node(val);
+		//when list is empty
 		
-		list.insertAtBegining(30);
-		list.insertAtBegining(20);
-		                       
+		if(head == null) { 
+			head = newNode;
+			tail = newNode;
+		}
+		else { //else list is not empty
+			head.prev = newNode;
+			newNode.next = head; 
+			
+		}
+		head = newNode;
+	}
+	
+	public void display() {
+		Node temp = head;
+		while(temp != null) {
+			System.out.print(temp.data +" ");
+			temp = temp.next;		
+			}
+	}
+	public void displayRev() {
+		Node temp = tail;
+		while(temp != null) {
+			System.out.print(temp.data +" ");
+			temp = temp.prev;		
+			}
+	}
+	
+	
+	public void insertAtPos(int pos, int val) {
+		Node newNode =new Node(val);
+		if(pos==0) {
+			
+			insertAtBegining(val);
+			return;
+		}
 		
-		list.display();
-		System.out.println("");
-		list.insertAtPos(0,10);
-		list.display();
+		Node temp = head;
+		for(int i =1; i<pos;i++) {// jump to previous node
+			temp = temp.next;
+			if(temp ==null) {
+				throw new IndexOutOfBoundsException("Invalid Position"+pos);
+				
+			}
+		}
+		newNode.next = temp.next;
+		newNode.prev = temp;
+		
+		temp.next.prev = newNode;
+		temp.next = newNode;
 		
 		
 		
-		list.deleteAtpos(3);
-		System.out.println("");
-		list.display();
+		}
+	public void deleteAtpos(int pos) {
+		if(head == null) {
+			throw new IndexOutOfBoundsException("List is empty");
+		}
 		
-		System.out.println("");
-		list.reverse();
-		list.display();
+		//IF WE WANT TO DELETE BEGINING POS USE ANOTHER METHODE OR USE BELOW LINES 
+		if(pos ==0) {
+			head =head.next;
+			return;
+		} //
 		
-		System.out.println("");
-		list.deleteAtEnd();
-		list.display();
+		Node temp = head;
+		Node prev = null;
 		
-		System.out.println();
-		System.out.println(list.getIndex(1));
+		//Jump till node to be deleted
+		for(int i=1;i<=pos;i++) {
+			prev = temp; //KeepTrack of Prev Node
+			temp = temp.next; //jump to next node
+			
+		}
+		prev.next = temp.next;
 		
-		System.out.println("");
-		list.update(2,10);
-		list.display();
+	}
+	
+	public void reverse() {
+		Node prev = null;
+		Node current = head;
+		Node next = head.next;
 		
-		System.out.println( "\n"+list.contain(10));
-		
-		
+		while(current != null) {
+			next = current.next;
+			current.next = prev; //reverse link
+			
+			
+			prev = current;
+			current = next;
+			
+		}
+		head = prev;
 	}
 }
